@@ -1,19 +1,15 @@
--- Drop the existing database if it exists
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'shoppingSite')
 BEGIN
     ALTER DATABASE shoppingSite SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE shoppingSite;
 END
 
--- Create a new database
 CREATE DATABASE shoppingSite;
 
--- Use the newly created database
+
 USE shoppingSite;
 
--- Create tables and set up schema here
 
--- Create the Customers table
 CREATE TABLE Customers (
     customer_id INT PRIMARY KEY,
     first_name VARCHAR(20),
@@ -23,7 +19,7 @@ CREATE TABLE Customers (
     billing_address TEXT
 );
 
--- Create the Categories table
+
 CREATE TABLE Categories (
     category_id INT PRIMARY KEY,
     name VARCHAR(20),
@@ -31,7 +27,7 @@ CREATE TABLE Categories (
     FOREIGN KEY (parent_category_id) REFERENCES Categories(category_id)
 );
 
--- Create the Products table with foreign key reference to Categories
+
 CREATE TABLE Products (
     product_id INT PRIMARY KEY,
     name VARCHAR(20),
@@ -53,7 +49,7 @@ CREATE TABLE Promotions (
     discount_value DECIMAL(7)
 );
 
--- Create the Reviews table with foreign key references
+
 CREATE TABLE Reviews (
     review_id INT PRIMARY KEY,
     product_id INT,
@@ -65,15 +61,12 @@ CREATE TABLE Reviews (
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
 
--- Create the Carts table with foreign key reference to Customers
 CREATE TABLE Carts (
     cart_id INT PRIMARY KEY,
     customer_id INT,
     creation_date DATE,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
-
--- Create the Cart_Items table with foreign key references
 CREATE TABLE Cart_Items (
     cart_item_id INT PRIMARY KEY,
     cart_id INT,
@@ -82,8 +75,6 @@ CREATE TABLE Cart_Items (
     FOREIGN KEY (cart_id) REFERENCES Carts(cart_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
-
--- Create the Orders table with foreign key reference to Customers
 CREATE TABLE Orders (
     order_id INT PRIMARY KEY,
     customer_id INT,
@@ -92,7 +83,6 @@ CREATE TABLE Orders (
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
 
--- Create the Order_Items table with foreign key references
 CREATE TABLE Order_Items (
     order_item_id INT PRIMARY KEY,
     order_id INT,
@@ -102,7 +92,6 @@ CREATE TABLE Order_Items (
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
--- Create the Product_Promotions table with foreign key references
 CREATE TABLE Product_Promotions (
     product_promotion_id INT PRIMARY KEY,
     product_id INT,
@@ -117,3 +106,144 @@ CREATE TABLE Product_Promotions (
 
 
 
+
+
+
+-- =======================YAHAN INSERTION OF DATA (10 ROWS)======================================--
+
+
+INSERT INTO Customers (customer_id, first_name, last_name, email, shipping_address, billing_address)
+VALUES
+(1, 'Zeshan', 'Khan', 'zeshan@example.com', '123 Main Street, Lahore', '123 Main Street, Lahore'),
+(2, 'Ali', 'Ahmed', 'ali@example.com', '456 Park Avenue, Karachi', '456 Park Avenue, Karachi'),
+(3, 'Fatima', 'Khan', 'fatima@example.com', '789 Lake Road, Islamabad', '789 Lake Road, Islamabad'),
+(4, 'Ayesha', 'Ali', 'ayesha@example.com', '101 Liberty Square, Lahore', '101 Liberty Square, Lahore'),
+(5, 'Ahmed', 'Hussain', 'ahmed@example.com', '321 Garden Street, Karachi', '321 Garden Street, Karachi'),
+(6, 'Sana', 'Malik', 'sana@example.com', '555 Green Avenue, Islamabad', '555 Green Avenue, Islamabad'),
+(7, 'Farhan', 'Khan', 'farhan@example.com', '999 Pine Street, Lahore', '999 Pine Street, Lahore'),
+(8, 'Sadia', 'Ahmed', 'sadia@example.com', '777 Oak Street, Karachi', '777 Oak Street, Karachi'),
+(9, 'Bilal', 'Khan', 'bilal@example.com', '888 Elm Road, Islamabad', '888 Elm Road, Islamabad'),
+(10, 'Amna', 'Ali', 'amna@example.com', '444 Maple Avenue, Lahore', '444 Maple Avenue, Lahore');
+
+
+INSERT INTO Categories (category_id, name, parent_category_id)
+VALUES
+(1, 'Electronics', NULL),
+(2, 'Clothing', NULL),
+(3, 'Mobile Phones', 1),
+(4, 'Laptops', 1),
+(5, 'Men''s Clothing', 2),
+(6, 'Women''s Clothing', 2),
+(7, 'Accessories', 1),
+(8, 'Shoes', 2),
+(9, 'Beauty', NULL),
+(10, 'Health', NULL);
+
+
+INSERT INTO Products (product_id, name, description, category_id, price, stock_level)
+VALUES
+(1, 'Smartphone', 'Latest smartphone model', 3, 1000.00, 50),
+(2, 'Laptop', 'High-performance laptop', 4, 1500.00, 30),
+(3, 'T-Shirt', 'Casual cotton t-shirt', 5, 20.00, 100),
+(4, 'Dress', 'Elegant evening dress', 6, 50.00, 50),
+(5, 'Watch', 'Stylish wristwatch', 7, 100.00, 80),
+(6, 'Sneakers', 'Comfortable sports shoes', 8, 80.00, 70),
+(7, 'Lipstick', 'Long-lasting matte lipstick', 9, 15.00, 120),
+(8, 'Protein Powder', 'Muscle-building protein supplement', 10, 30.00, 90),
+(9, 'Headphones', 'Noise-canceling headphones', 1, 120.00, 60),
+(10, 'Jeans', 'Classic denim jeans', 5, 40.00, 70);
+
+
+INSERT INTO Promotions (promotion_id, promoName, promoDesc, start_date, end_date, discount_type, discount_value)
+VALUES
+(1, 'Summer Sale', 'Get discounts on selected items', '2024-06-01', '2024-06-30', 'Percentage', 10.00),
+(2, 'Clearance Sale', 'Clearance of old stock', '2024-07-01', '2024-07-31', 'Percentage', 20.00),
+(3, 'Flash Sale', 'Limited time offer', '2024-08-01', '2024-08-15', 'Fixed Amount', 50.00),
+(4, 'Holiday Special', 'Special discounts for the holiday season', '2024-12-01', '2024-12-31', 'Percentage', 15.00),
+(5, 'New Year Sale', 'Welcome the new year with great deals', '2025-01-01', '2025-01-31', 'Percentage', 25.00),
+(6, 'Back to School', 'Back to school discounts', '2024-09-01', '2024-09-15', 'Fixed Amount', 30.00),
+(7, 'Spring Clearance', 'Clearance of spring items', '2024-04-01', '2024-04-30', 'Percentage', 20.00),
+(8, 'Eid Special', 'Special offers for Eid celebrations', '2024-05-01', '2024-05-15', 'Percentage', 15.00),
+(9, 'Winter Sale', 'Stay warm with hot discounts', '2024-11-01', '2024-11-30', 'Fixed Amount', 40.00),
+(10, 'Black Friday', 'Biggest sale of the year', '2024-11-25', '2024-11-25', 'Percentage', 30.00);
+
+
+INSERT INTO Reviews (review_id, product_id, customer_id, rating, review_text, review_date)
+VALUES
+(1, 1, 1, 5, 'Great phone, love the camera!', '2024-03-20'),
+(2, 2, 2, 4, 'Good laptop for everyday use.', '2024-03-21'),
+(3, 3, 3, 5, 'Comfortable and good quality.', '2024-03-22'),
+(4, 4, 4, 3, 'Nice dress, but a bit pricey.', '2024-03-23'),
+(5, 5, 5, 4, 'Sleek design and good functionality.', '2024-03-24'),
+(6, 6, 6, 5, 'Very comfortable shoes, perfect for running.', '2024-03-25'),
+(7, 7, 7, 4, 'Long-lasting and vibrant colors.', '2024-03-26'),
+(8, 8, 8, 4, 'Great taste and mixes well.', '2024-03-27'),
+(9, 9, 9, 5, 'Excellent sound quality and noise cancellation.', '2024-03-28'),
+(10, 10, 10, 5, 'Perfect fit and good quality denim.', '2024-03-29');
+
+
+INSERT INTO Carts (cart_id, customer_id, creation_date)
+VALUES
+(1, 1, '2024-03-20'),
+(2, 2, '2024-03-21'),
+(3, 3, '2024-03-22'),
+(4, 4, '2024-03-23'),
+(5, 5, '2024-03-24'),
+(6, 6, '2024-03-25'),
+(7, 7, '2024-03-26'),
+(8, 8, '2024-03-27'),
+(9, 9, '2024-03-28'),
+(10, 10, '2024-03-29');
+
+INSERT INTO Cart_Items (cart_item_id, cart_id, product_id, quantity)
+VALUES
+(1, 1, 1, 2),
+(2, 1, 3, 1),
+(3, 2, 2, 1),
+(4, 3, 4, 3),
+(5, 4, 5, 1),
+(6, 5, 6, 2),
+(7, 6, 7, 1),
+(8, 7, 8, 2),
+(9, 8, 9, 1),
+(10, 9, 10, 1);
+
+INSERT INTO Orders (order_id, customer_id, order_date, order_status)
+VALUES
+(1, 1, '2024-03-20', 'Pending'),
+(2, 2, '2024-03-21', 'Pending'),
+(3, 3, '2024-03-22', 'Pending'),
+(4, 4, '2024-03-23', 'Pending'),
+(5, 5, '2024-03-24', 'Pending'),
+(6, 6, '2024-03-25', 'Pending'),
+(7, 7, '2024-03-26', 'Pending'),
+(8, 8, '2024-03-27', 'Pending'),
+(9, 9, '2024-03-28', 'Pending'),
+(10, 10, '2024-03-29', 'Pending');
+
+
+INSERT INTO Order_Items (order_item_id, order_id, product_id, quantity)
+VALUES
+(1, 1, 1, 2),
+(2, 1, 3, 1),
+(3, 2, 2, 1),
+(4, 3, 4, 3),
+(5, 4, 5, 1),
+(6, 5, 6, 2),
+(7, 6, 7, 1),
+(8, 7, 8, 2),
+(9, 8, 9, 1),
+(10, 9, 10, 1);
+
+INSERT INTO Product_Promotions (product_promotion_id, product_id, promotion_id)
+VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(5, 5, 5),
+(6, 6, 6),
+(7, 7, 7),
+(8, 8, 8),
+(9, 9, 9),
+(10, 10, 10);
