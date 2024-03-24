@@ -1,0 +1,119 @@
+-- Drop the existing database if it exists
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'shoppingSite')
+BEGIN
+    ALTER DATABASE shoppingSite SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE shoppingSite;
+END
+
+-- Create a new database
+CREATE DATABASE shoppingSite;
+
+-- Use the newly created database
+USE shoppingSite;
+
+-- Create tables and set up schema here
+
+-- Create the Customers table
+CREATE TABLE Customers (
+    customer_id INT PRIMARY KEY,
+    first_name VARCHAR(20),
+    last_name VARCHAR(20),
+    email VARCHAR(20),
+    shipping_address TEXT,
+    billing_address TEXT
+);
+
+-- Create the Categories table
+CREATE TABLE Categories (
+    category_id INT PRIMARY KEY,
+    name VARCHAR(20),
+    parent_category_id INT,
+    FOREIGN KEY (parent_category_id) REFERENCES Categories(category_id)
+);
+
+-- Create the Products table with foreign key reference to Categories
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY,
+    name VARCHAR(20),
+    description TEXT,
+    category_id INT,
+    price DECIMAL(7),
+    stock_level INT,
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+);
+
+-- Create the Promotions table
+CREATE TABLE Promotions (
+    promotion_id INT PRIMARY KEY,
+    promoName VARCHAR(20),
+    promoDesc TEXT,
+    start_date DATE,
+    end_date DATE,
+    discount_type VARCHAR(20),
+    discount_value DECIMAL(7)
+);
+
+-- Create the Reviews table with foreign key references
+CREATE TABLE Reviews (
+    review_id INT PRIMARY KEY,
+    product_id INT,
+    customer_id INT,
+    rating INT,
+    review_text TEXT,
+    review_date DATE,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+
+-- Create the Carts table with foreign key reference to Customers
+CREATE TABLE Carts (
+    cart_id INT PRIMARY KEY,
+    customer_id INT,
+    creation_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+
+-- Create the Cart_Items table with foreign key references
+CREATE TABLE Cart_Items (
+    cart_item_id INT PRIMARY KEY,
+    cart_id INT,
+    product_id INT,
+    quantity INT,
+    FOREIGN KEY (cart_id) REFERENCES Carts(cart_id),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+-- Create the Orders table with foreign key reference to Customers
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    order_status VARCHAR(20),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+
+-- Create the Order_Items table with foreign key references
+CREATE TABLE Order_Items (
+    order_item_id INT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+-- Create the Product_Promotions table with foreign key references
+CREATE TABLE Product_Promotions (
+    product_promotion_id INT PRIMARY KEY,
+    product_id INT,
+    promotion_id INT,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id),
+    FOREIGN KEY (promotion_id) REFERENCES Promotions(promotion_id)
+);
+
+
+
+
+
+
+
