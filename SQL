@@ -154,6 +154,11 @@ VALUES
 (10, 'Jeans', 'Classic denim jeans', 5, 40.00, 70);
 
 
+INSERT INTO Products( product_id, name, description, category_id, price, stock_level)
+VALUES
+(11, 'Big shoes', 'They are BIG', 5, 1403, 40);
+
+
 INSERT INTO Promotions (promotion_id, promoName, promoDesc, start_date, end_date, discount_type, discount_value)
 VALUES
 (1, 'Summer Sale', 'Get discounts on selected items', '2024-06-01', '2024-06-30', 'Percentage', 10.00),
@@ -247,3 +252,100 @@ VALUES
 (8, 8, 8),
 (9, 9, 9),
 (10, 10, 10);
+
+
+
+
+-- ====================================QUERIES YAHAN AYENGI============================ --
+
+
+-- Question 2
+SELECT name, price FROM Products;
+
+-- Question 4
+SELECT * FROM Products
+WHERE stock_level <= 50;
+
+-- Question 6
+SELECT * FROM Products
+WHERE price BETWEEN 1000 AND 5000;
+
+
+-- Question 8
+
+SELECT * FROM Products
+WHERE name LIKE '%shoes%';
+
+-- Question 10
+
+SELECT DISTINCT category_id FROM Products;
+
+-- Question 12
+
+-- Question 14
+
+-- Question 16
+
+-- Question 18
+
+-- Question 20
+
+-- Question 22
+
+-- Question 24
+
+-- Question 26
+
+-- Question 28
+
+-- Question 30
+
+-- Question 32
+
+-- Question 34
+
+-- Question 36
+
+-- Question 38
+
+-- Question 40
+
+-- Question 42
+
+-- Question 44
+
+-- Question 46
+
+-- Question 48
+
+-- Question 50
+
+-- Question 52
+
+-- Question 54
+
+-- Question 56
+
+-- Question 58
+
+-- Question 60
+
+-- Question 62
+
+-- Question 64
+
+-- Question 66
+
+-- Question 68
+
+-- Question 70
+
+-- Question 72
+
+-- Question 74
+
+-- Question 76
+
+-- Question 78
+
+-- Question 80
