@@ -186,6 +186,10 @@ VALUES
 (9, 9, 9, 5, 'Excellent sound quality and noise cancellation.', '2024-03-28'),
 (10, 10, 10, 5, 'Perfect fit and good quality denim.', '2024-03-29');
 
+INSERT INTO Reviews (review_id, product_id, customer_id, rating, review_text, review_date)
+VALUES
+(11, 1, 2, 5, 'WOOHOO!', '2024-03-20');
+
 
 INSERT INTO Carts (cart_id, customer_id, creation_date)
 VALUES
@@ -258,94 +262,300 @@ VALUES
 
 -- ====================================QUERIES YAHAN AYENGI============================ --
 
+--Q1 
+SELECT * FROM Products;
 
 -- Question 2
 SELECT name, price FROM Products;
+
+--Q3
+SELECT * FROM Products
+WHERE price > 1000;
 
 -- Question 4
 SELECT * FROM Products
 WHERE stock_level <= 50;
 
+--Q5
+SELECT * FROM Products
+Order By price DESC;
+
 -- Question 6
 SELECT * FROM Products
 WHERE price BETWEEN 1000 AND 5000;
 
+--Q7
+SELECT * FROM Products
+WHERE name LIKE '[P]%';
 
 -- Question 8
 
 SELECT * FROM Products
 WHERE name LIKE '%shoes%';
 
+--Q9
+SELECT * FROM Products
+Order By name;
+
 -- Question 10
 
 SELECT DISTINCT category_id FROM Products;
 
+--Q11
+SELECT * FROM Products
+WHERE category_id =2 AND price <= 3000;
+
 -- Question 12
+
+--Q13
+SELECT * FROM Products
+WHERE name LIKE '[M]%' AND price >5000;
 
 -- Question 14
 
+--Q15
+SELECT * FROM Products
+ORDER BY stock_level DESC;
+
 -- Question 16
+
+-- Q17
+SELECT * FROM Products
+WHERE price >  (SELECT AVG(price) FROM Products);
 
 -- Question 18
 
+--Q19
+SELECT * FROM Products
+WHERE category_id =1 OR category_id=3 OR category_id=4;
+
 -- Question 20
+
+--Q21
+SELECT COUNT(*) AS total_products FROM Products;
 
 -- Question 22
 
+--Q23
+SELECT MAX(price) AS max_price FROM Products;
+
+
 -- Question 24
+
+--Q25
+SELECT SUM(stock_level) AS sum_stock FROM Products;
 
 -- Question 26
 
+
+--Q27
+SELECT category_id, COUNT(*) as total_items FROM Products
+GROUP BY category_id;
+
 -- Question 28
+
+-- Q29
+SELECT * FROM Products
+WHERE price = (SELECT MAX(price) FROM Products);
 
 -- Question 30
 
+--Q31
+SELECT category_id, AVG(price) as avg_price FROM Products
+GROUP BY category_id;
+
 -- Question 32
+
+--Q33
+SELECT COUNT(*) AS total_items FROM Products
+WHERE stock_level > 0;
 
 -- Question 34
 
+--Q35
+SELECT top 1 category_id, AVG(price) as avg_price FROM Products
+GROUP BY category_id
+ORDER BY AVG(price) DESC;
+
 -- Question 36
+
+--Q37
+SELECT top 1 * FROM Products
+ORDER BY stock_level DESC;
 
 -- Question 38
 
+--Q39
+SELECT COUNT(*) as total_items FROM Products
+WHERE price >5000;
+
 -- Question 40
+
+--Q41
+SELECT COUNT(*) as total_orders FROM Orders;
 
 -- Question 42
 
+-- Q43
+SELECT c.customer_id, c.first_name, c.last_name, COUNT(o.order_id) AS order_count
+FROM Customers c
+JOIN Orders o ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.first_name, c.last_name
+ORDER BY order_count DESC;
+
 -- Question 44
+
+
+--Q45
+SELECT c.name,SUM(p.price) AS total_revenue FROM Products p
+JOIN  Categories c ON c.category_id=p.category_id
+GROUP BY p.category_id, c.name;
 
 -- Question 46
 
+--Q47
+SELECT pp.promotion_id, p.promoName, SUM(pr.price) AS total_value FROM Product_Promotions pp
+JOIN Products pr ON pp.product_id = pr.product_id
+JOIN  Promotions p ON pp.promotion_id = p.promotion_id
+GROUP BY pp.promotion_id, p.promoName
+ORDER BY pp.promotion_id;
+
 -- Question 48
+
+--Q49
+SELECT o.order_id, SUM(oi.quantity) as total_items FROM Orders o
+JOIN Order_Items oi ON o.order_id = oi.order_id
+GROUP BY o.order_id;
 
 -- Question 50
 
+--Q51
+SELECT c.customer_id, CONCAT(c.first_name, ' ', c.last_name) AS Name  ,COUNT(r.customer_id) AS total_reviews FROM Customers c
+JOIN Reviews r ON c.customer_id = r.customer_id
+GROUP BY c.customer_id, c.first_name, c.last_name;
+
 -- Question 52
+
+--Q53
+SELECT c.name AS category_name, AVG(p.price) AS average_price
+FROM Categories c
+JOIN Products p ON c.category_id = p.category_id
+GROUP BY c.name
+ORDER BY average_price DESC
 
 -- Question 54
 
+
+--Q55
+SELECT customer_id, SUM(price * quantity) AS total_revenue
+FROM Orders o
+JOIN Order_Items oi ON o.order_id = oi.order_id
+JOIN Products p ON oi.product_id = p.product_id
+GROUP BY customer_id;
+
 -- Question 56
+
+-- Q57
+SELECT TOP 1 product_id, AVG(rating) AS average_rating
+FROM Reviews
+GROUP BY product_id
+ORDER BY average_rating DESC;
 
 -- Question 58
 
+--Q59
+SELECT TOP 1 customer_id, SUM(price * quantity) AS order_value
+FROM Orders o
+JOIN Order_Items oi ON o.order_id = oi.order_id
+JOIN Products p ON oi.product_id = p.product_id
+GROUP BY customer_id
+ORDER BY order_value DESC;
+
 -- Question 60
+
+--Q61
+SELECT c.category_id, c.name AS category_name, COUNT(p.product_id) AS total_products
+FROM Categories c
+JOIN Products p ON c.category_id = p.category_id
+GROUP BY c.category_id, c.name;
 
 -- Question 62
 
+--Q63
+SELECT TOP 1 c.category_id, c.name AS category_name, SUM(price * stock_level) AS total_value
+FROM Categories c
+JOIN Products p ON c.category_id = p.category_id
+GROUP BY c.category_id, c.name
+ORDER BY total_value DESC;
+
 -- Question 64
+
+--Q65
+SELECT customer_id, COUNT(order_id) AS total_orders
+FROM Orders
+GROUP BY customer_id;
 
 -- Question 66
 
+--Q67
+SELECT c.shipping_address ,SUM(p.stock_level) AS total_stock
+FROM Customers c
+JOIN Orders o ON c.customer_id = o.customer_id
+JOIN Order_Items oi ON o.order_id = oi.order_id
+JOIN Products p ON oi.product_id = p.product_id
+GROUP BY c.shipping_address;
+
 -- Question 68
+
+--Q69 
+SELECT TOP 1 c.category_id, c.name AS category_name, AVG(p.price) AS average_price
+FROM Categories c
+JOIN Products p ON c.category_id = p.category_id
+GROUP BY c.category_id, c.name
+ORDER BY average_price DESC;
 
 -- Question 70
 
+--Q71
+SELECT customer_id, SUM(quantity) AS total_products_purchased
+FROM Order_Items oi
+JOIN Orders o ON oi.order_id = o.order_id
+GROUP BY customer_id;
+
 -- Question 72
+
+--Q73
+SELECT TOP 1 c.category_id, c.name AS category_name, COUNT(p.product_id) AS total_products
+FROM Categories c
+JOIN Products p ON c.category_id = p.category_id
+GROUP BY c.category_id, c.name
+ORDER BY total_products DESC;
 
 -- Question 74
 
+--Q75
+SELECT TOP 1 product_id, COUNT(order_id) AS total_orders
+FROM Order_Items
+GROUP BY product_id
+ORDER BY total_orders DESC;
+
 -- Question 76
 
+--Q77
+SELECT TOP 1 o.customer_id, AVG(p.price * oi.quantity) AS average_order_value
+FROM Order_Items oi
+JOIN Orders o ON oi.order_id = o.order_id
+JOIN Products p ON p.product_id = oi.product_id
+GROUP BY o.customer_id
+ORDER BY average_order_value DESC;
+
 -- Question 78
+
+--Q79
+SELECT TOP 1 o.customer_id, AVG(oi.quantity) AS average_quantity_per_order FROM Order_Items oi
+JOIN Orders o ON o.order_id = oi.order_id
+GROUP BY o.customer_id
+ORDER BY average_quantity_per_order DESC;
+
 
 -- Question 80
